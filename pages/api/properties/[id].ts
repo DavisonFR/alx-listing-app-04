@@ -1,3 +1,4 @@
+import ReviewSection from "@/components/property/ReviewSection";
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
