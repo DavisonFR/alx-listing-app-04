@@ -1,7 +1,7 @@
-import { useState } from "react";
 import axios from "axios";
+import { useState } from "react";
 
-export default function BookingPage() {
+export default function BookingForm() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -18,7 +18,10 @@ export default function BookingPage() {
   const [success, setSuccess] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,8 +30,8 @@ export default function BookingPage() {
     setError("");
     setSuccess("");
 
-    // Simple validation
-    if (!formData.firstName || !formData.email || !formData.cardNumber) {
+    // Optional simple validation
+    if (!formData.email || !formData.firstName || !formData.lastName || !formData.cardNumber) {
       setError("Please fill in all required fields.");
       setLoading(false);
       return;
@@ -36,7 +39,7 @@ export default function BookingPage() {
 
     try {
       const response = await axios.post("/api/bookings", formData);
-      setSuccess("✅ Booking confirmed!");
+      setSuccess("Booking confirmed!");
       setFormData({
         firstName: "",
         lastName: "",
@@ -49,26 +52,26 @@ export default function BookingPage() {
       });
     } catch (err) {
       console.error("Booking API error:", err);
-      setError("❌ Failed to submit booking.");
+      setError("Failed to submit booking.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className="max-w-md mx-auto p-6">
+    <main className="max-w-lg mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">🧾 Confirm Your Booking</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         {["firstName", "lastName", "email", "phoneNumber", "cardNumber", "expirationDate", "cvv", "billingAddress"].map((field) => (
           <input
             key={field}
-            name={field}
             type="text"
+            name={field}
             placeholder={field}
             value={(formData as any)[field]}
             onChange={handleChange}
             required
-            className="border p-2 rounded w-full"
+            className="border p-2 w-full rounded"
           />
         ))}
 
